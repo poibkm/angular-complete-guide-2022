@@ -5,3 +5,7 @@
 p {
   color: blue;
 }
+
+.btn-toolbar {
+  margin-bottom: 2rem;
+}
