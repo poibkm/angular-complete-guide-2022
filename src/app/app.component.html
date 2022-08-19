@@ -30,6 +30,21 @@
             {{ even }}
           </li>
         </div>
+        <!-- Exactly the same code behind the scene, this is what the * transforms it to -->
+        <ng-template [ngIf]="!onlyOdd">
+          <div>
+            <li
+              class="list-group-item"
+              *ngFor="let even of evenNumbers"
+              [ngClass]="{ odd: even % 2 !== 0 }"
+              [ngStyle]="{
+                backgroundColor: even % 2 !== 0 ? 'yellow' : 'transparent'
+              }"
+            >
+              {{ even }}
+            </li>
+          </div>
+        </ng-template>
       </ul>
       <p appBasicHighlight>Style Me With Basic Directive</p>
       <p [appBetterHighlight]="'red'" defaultColor="yellow">
