@@ -11,6 +11,7 @@ import { UserComponent } from "./users/user/user.component";
 import { EditServerComponent } from "./servers/edit-server/edit-server.component";
 import { ServerComponent } from "./servers/server/server.component";
 import { ServersService } from "./servers/servers.service";
+import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
 
 export const routes: Routes = [
   { path: "", component: HomeComponent },
@@ -27,6 +28,9 @@ export const routes: Routes = [
       { path: ":id/edit", component: EditServerComponent },
     ],
   },
+  { path: "not-found", component: PageNotFoundComponent },
+  // This generic route should always be the last one!
+  { path: "**", redirectTo: "/not-found" },
 ];
 
 @NgModule({
@@ -38,6 +42,7 @@ export const routes: Routes = [
     UserComponent,
     EditServerComponent,
     ServerComponent,
+    PageNotFoundComponent,
   ],
   imports: [BrowserModule, FormsModule, RouterModule.forRoot(routes)],
   providers: [ServersService],
