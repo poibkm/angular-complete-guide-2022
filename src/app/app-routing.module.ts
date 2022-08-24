@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { AuthGuardService } from "./auth-guard.service";
+import { ErrorPageComponent } from "./error-page/error-page.component";
 import { HomeComponent } from "./home/home.component";
 import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
 import { CanDeactivateGuardService } from "./servers/edit-server/can-deactivate-guard.service";
@@ -31,7 +32,12 @@ const routes: Routes = [
       },
     ],
   },
-  { path: "not-found", component: PageNotFoundComponent },
+  // { path: "not-found", component: PageNotFoundComponent },
+  {
+    path: "not-found",
+    component: ErrorPageComponent,
+    data: { message: "Page not found!" },
+  },
   // This generic route should always be the last one!
   { path: "**", redirectTo: "/not-found" },
 ];
