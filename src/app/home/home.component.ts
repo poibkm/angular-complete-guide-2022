@@ -54,6 +54,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.firstObsSubsription.unsubscribe();
+    // this.firstObsSubsription.unsubscribe();
   }
 }
