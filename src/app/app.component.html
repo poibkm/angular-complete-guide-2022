@@ -1,33 +1,27 @@
 <div class="container">
-  <app-cockpit
-    (serverCreated)="onServerAdded($event)"
-    (bpCreated)="onBlueprintAdded($event)"
-  ></app-cockpit>
-  <hr />
   <div class="row">
-    <div class="col-xs-12">
-      <div class="btn-toolbar">
-        <button class="btn btn-primary" (click)="onChangeFirst()">
-          Change First Element
-        </button>
-        <button class="btn btn-danger" (click)="onDestroyFirst()">
-          Destroy First Component
-        </button>
-      </div>
-      <app-server-element
-        *ngFor="let serverElement of serverElements"
-        [srvElement]="serverElement"
-        [name]="serverElement.name"
-      >
-        <p #contentParagraph>
-          <strong *ngIf="serverElement.type === 'server'" style="color: red">{{
-            serverElement.content
-          }}</strong>
-          <em *ngIf="serverElement.type === 'blueprint'">{{
-            serverElement.content
-          }}</em>
-        </p>
-      </app-server-element>
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <form>
+        <div id="user-data">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" class="form-control">
+          </div>
+          <button class="btn btn-default" type="button">Suggest an Username</button>
+          <div class="form-group">
+            <label for="email">Mail</label>
+            <input type="email" id="email" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="secret">Secret Questions</label>
+          <select id="secret" class="form-control">
+            <option value="pet">Your first Pet?</option>
+            <option value="teacher">Your first teacher?</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </form>
     </div>
   </div>
 </div>
