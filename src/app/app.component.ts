@@ -31,10 +31,28 @@ export class AppComponent implements OnInit {
 
     // this.signupForm.valueChanges.subscribe((value) => console.log(value));
     this.signupForm.statusChanges.subscribe((value) => console.log(value));
+
+    this.signupForm.setValue({
+      userData: {
+        username: "Max",
+        email: "manuel@test.com",
+      },
+      gender: "other",
+      hobbies: [],
+    });
+
+    this.signupForm.patchValue({
+      userData: {
+        username: "Mike",
+        email: "manuel@test.com",
+      },
+    });
   }
 
   onSubmit() {
     console.log(this.signupForm);
+    // You can pass an object to reset to reset specific values
+    this.signupForm.reset();
   }
 
   onAddHobby() {
