@@ -9,7 +9,7 @@ import { Post } from "./post.model";
   styleUrls: ["./app.component.css"],
 })
 export class AppComponent implements OnInit {
-  loadedPosts = [];
+  loadedPosts: Post[] = [];
   private DATABASE_URL =
     "https://ng-complete-guide-f22ba-default-rtdb.europe-west1.firebasedatabase.app";
 
@@ -59,7 +59,7 @@ export class AppComponent implements OnInit {
         ) */
       )
       .subscribe((posts) => {
-        console.log(posts);
+        this.loadedPosts = posts;
       });
   }
 }
