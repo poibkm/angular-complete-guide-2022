@@ -9,12 +9,17 @@ export class FilterPipe implements PipeTransform {
       return value;
     }
 
-    const resultArray = [];
+    /* const resultArray = [];
     for (const item of value) {
       if (item[propName] === filterString) {
         resultArray.push(item);
       }
     }
-    return resultArray;
+    return resultArray; */
+
+    let result = value.filter((el) =>
+      el[propName].toLowerCase().includes(filterString.toLowerCase())
+    );
+    return result;
   }
 }
