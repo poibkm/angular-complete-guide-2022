@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-root",
@@ -38,8 +39,26 @@ export class AppComponent implements OnInit {
   }
 
   private fetchPosts() {
-    this.http.get(`${this.DATABASE_URL}/posts.json`).subscribe((posts) => {
-      console.log(posts);
-    });
+    this.http
+      .get(`${this.DATABASE_URL}/posts.json`)
+      .pipe(
+        // map - rewrap data into an observable
+        map((responseData) => {
+          const postsArray = [];
+          for (const key in responseData) {
+            if (responseData.hasOwnProperty(key)) {
+              postsArray.push({ ...responseData[key], id: key });
+            }
+          }
+          return postsArray;
+        })
+        // Suggestion by Jost
+        /* map((resData) =>
+          Object.entries(resData).map(([id, post]) => ({ ...post, id }))
+        ) */
+      )
+      .subscribe((posts) => {
+        console.log(posts);
+      });
   }
 }
