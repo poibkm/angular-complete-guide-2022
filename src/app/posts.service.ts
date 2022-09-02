@@ -22,24 +22,21 @@ export class PostsService {
   }
 
   fetchPosts() {
-    this.http
-      .get<{ [key: string]: Post }>(this.DATABASE_URL)
-      .pipe(
-        // map - rewrap data into an observable
-        map((responseData) => {
-          const postsArray: Post[] = [];
-          for (const key in responseData) {
-            if (responseData.hasOwnProperty(key)) {
-              postsArray.push({ ...responseData[key], id: key });
-            }
+    return this.http.get<{ [key: string]: Post }>(this.DATABASE_URL).pipe(
+      // map - rewrap data into an observable
+      map((responseData) => {
+        const postsArray: Post[] = [];
+        for (const key in responseData) {
+          if (responseData.hasOwnProperty(key)) {
+            postsArray.push({ ...responseData[key], id: key });
           }
-          return postsArray;
-        })
-        // Suggestion by Jost
-        /* map((resData) =>
+        }
+        return postsArray;
+      })
+      // Suggestion by Jost
+      /* map((resData) =>
           Object.entries(resData).map(([id, post]) => ({ ...post, id }))
         ) */
-      )
-      .subscribe((posts) => {});
+    );
   }
 }
