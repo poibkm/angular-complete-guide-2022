@@ -1,5 +1,5 @@
 {
-  "name": "ng-complete-guide-update",
+  "name": "my-first-app",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -20,8 +20,8 @@
     "@angular/platform-browser-dynamic": "^11.0.5",
     "@angular/router": "^11.0.5",
     "bootstrap": "3.3.7",
-    "rxjs": "^6.6.7",
-    "rxjs-compat": "^6.6.7",
+    "rxjs": "^6.6.3",
+    "rxjs-compat": "^6.0.0",
     "tslib": "^2.0.3",
     "zone.js": "^0.10.3"
   },
