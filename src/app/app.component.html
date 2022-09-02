@@ -58,7 +58,7 @@
           <p>{{ post.content }}</p>
         </li>
       </ul>
-      <p *ngIf="isFetching">Loading...</p>
+      <div *ngIf="isFetching" class="lds-dual-ring"></div>
     </div>
   </div>
 </div>
