@@ -58,7 +58,11 @@
           <p>{{ post.content }}</p>
         </li>
       </ul>
-      <div class="lds-dual-ring" *ngIf="isFetching"></div>
+      <div class="lds-dual-ring" *ngIf="isFetching && !error"></div>
+      <div class="alert alert-danger" *ngIf="error">
+        <h3>An Error Occured!</h3>
+        <p>{{ error }}</p>
+      </div>
     </div>
   </div>
 </div>

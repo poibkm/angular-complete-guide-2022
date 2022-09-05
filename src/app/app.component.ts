@@ -12,6 +12,7 @@ import { PostsService } from "./posts.service";
 export class AppComponent implements OnInit {
   loadedPosts: Post[] = [];
   isFetching = false;
+  error = null;
   private DATABASE_URL =
     "https://ng-complete-guide-f22ba-default-rtdb.europe-west1.firebasedatabase.app";
 
@@ -19,10 +20,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.isFetching = true;
-    this.postsService.fetchPosts().subscribe((posts) => {
-      this.isFetching = false;
-      this.loadedPosts = posts;
-    });
+    this.postsService.fetchPosts().subscribe(
+      (posts) => {
+        this.isFetching = false;
+        this.loadedPosts = posts;
+      },
+      (error) => {
+        this.error = error.message;
+      }
+    );
   }
 
   onCreatePost(postData: Post) {
@@ -33,10 +39,16 @@ export class AppComponent implements OnInit {
   onFetchPosts() {
     // Send Http request
     this.isFetching = true;
-    this.postsService.fetchPosts().subscribe((posts) => {
-      this.isFetching = false;
-      this.loadedPosts = posts;
-    });
+    this.postsService.fetchPosts().subscribe(
+      (posts) => {
+        this.isFetching = false;
+        this.loadedPosts = posts;
+      },
+      (error) => {
+        this.error = error.message;
+        console.log(error);
+      }
+    );
   }
 
   onClearPosts() {
