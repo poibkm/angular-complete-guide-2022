@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Subject, throwError } from "rxjs";
 import { map, catchError } from "rxjs/operators";
@@ -27,9 +27,20 @@ export class PostsService {
   }
 
   fetchPosts() {
+    let searchParam = new HttpParams();
+    searchParam = searchParam.append("print", "pretty");
+    searchParam = searchParam.append("custom", "key");
     return this.http
       .get<{ [key: string]: Post }>(this.DATABASE_URL, {
         headers: new HttpHeaders({ "Custom-Header": "Whatever" }),
+        // params: new HttpParams().set("print", "pretty"),
+        params: searchParam,
+
+        // Another way
+        /* params: new HttpParams()
+          .set("print", "pretty")
+          .set("param2", "val2")
+          .set("param3", "val3"), */
       })
       .pipe(
         // map - rewrap data into an observable
