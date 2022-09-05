@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Subject, throwError } from "rxjs";
 import { map, catchError } from "rxjs/operators";
@@ -27,26 +27,30 @@ export class PostsService {
   }
 
   fetchPosts() {
-    return this.http.get<{ [key: string]: Post }>(this.DATABASE_URL).pipe(
-      // map - rewrap data into an observable
-      map((responseData) => {
-        const postsArray: Post[] = [];
-        for (const key in responseData) {
-          if (responseData.hasOwnProperty(key)) {
-            postsArray.push({ ...responseData[key], id: key });
-          }
-        }
-        return postsArray;
-      }),
-      catchError((errorRes) => {
-        // Send to analytics server – some generic task
-        return throwError(errorRes);
+    return this.http
+      .get<{ [key: string]: Post }>(this.DATABASE_URL, {
+        headers: new HttpHeaders({ "Custom-Header": "Whatever" }),
       })
-      // Suggestion by Jost
-      /* map((resData) =>
+      .pipe(
+        // map - rewrap data into an observable
+        map((responseData) => {
+          const postsArray: Post[] = [];
+          for (const key in responseData) {
+            if (responseData.hasOwnProperty(key)) {
+              postsArray.push({ ...responseData[key], id: key });
+            }
+          }
+          return postsArray;
+        }),
+        catchError((errorRes) => {
+          // Send to analytics server – some generic task
+          return throwError(errorRes);
+        })
+        // Suggestion by Jost
+        /* map((resData) =>
           Object.entries(resData).map(([id, post]) => ({ ...post, id }))
         ) */
-    );
+      );
   }
 
   deletePosts() {
