@@ -44,7 +44,7 @@ export class PostsService {
         headers: new HttpHeaders({ "Custom-Header": "Whatever" }),
         // params: new HttpParams().set("print", "pretty"),
         params: searchParam,
-
+        responseType: "json",
         // Another way
         /* params: new HttpParams()
           .set("print", "pretty")
@@ -77,6 +77,7 @@ export class PostsService {
     return this.http
       .delete(this.DATABASE_URL, {
         observe: "events",
+        responseType: "text",
       })
       .pipe(
         // It's a good practice to use tap instead of map if we don't want to transform the response, just performing a side effect.
