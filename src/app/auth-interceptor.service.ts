@@ -1,9 +1,11 @@
 import {
+  HttpEventType,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
 } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { tap } from "rxjs/operators";
 
 @Injectable({ providedIn: "root" })
 export default class AuthInterceptorService implements HttpInterceptor {
@@ -26,6 +28,14 @@ export default class AuthInterceptorService implements HttpInterceptor {
       }
     }); */
 
-    return next.handle(modifiedRequest);
+    return next.handle(modifiedRequest).pipe(
+      tap((event) => {
+        console.log(event);
+        if (event.type === HttpEventType.Response) {
+          console.log("Response arrived, body data:");
+          console.log(event.body);
+        }
+      })
+    );
   }
 }
