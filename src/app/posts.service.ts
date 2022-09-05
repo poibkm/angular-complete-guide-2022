@@ -39,4 +39,8 @@ export class PostsService {
         ) */
     );
   }
+
+  deletePosts() {
+    return this.http.delete(this.DATABASE_URL);
+  }
 }
