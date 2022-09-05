@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { Post } from "./post.model";
 
@@ -9,16 +10,20 @@ import { Post } from "./post.model";
 export class PostsService {
   private DATABASE_URL =
     "https://ng-complete-guide-f22ba-default-rtdb.europe-west1.firebasedatabase.app/posts.json";
+  error = new Subject<string>();
 
   constructor(private http: HttpClient) {}
 
   createAndStorePost(title: string, content: string) {
     const postData: Post = { title: title, content: content };
-    this.http
-      .post<{ name: string }>(this.DATABASE_URL, postData)
-      .subscribe((responseData) => {
+    this.http.post<{ name: string }>(this.DATABASE_URL, postData).subscribe(
+      (responseData) => {
         console.log(responseData);
-      });
+      },
+      (error) => {
+        this.error.next(error.message);
+      }
+    );
   }
 
   fetchPosts() {
