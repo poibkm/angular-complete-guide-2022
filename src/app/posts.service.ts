@@ -79,6 +79,7 @@ export class PostsService {
         observe: "events",
       })
       .pipe(
+        // It's a good practice to use tap instead of map if we don't want to transform the response, just performing a side effect.
         tap((event) => {
           console.log(event);
           if (event.type === HttpEventType.Sent) {
