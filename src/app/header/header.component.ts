@@ -32,6 +32,10 @@ export default class HeaderComponent implements OnInit, OnDestroy {
     this.dataStorageService.fetchRecipes().subscribe();
   }
 
+  onLogout() {
+    this.authService.logout();
+  }
+
   // Not necessary to destroy, because the header component is always there
   ngOnDestroy() {
     this.userSub.unsubscribe();
