@@ -22,7 +22,7 @@ export class AuthService {
     "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAX_pG0lQyteKQLsTGQrAPSoYIkPJ9jHiQ";
   signUp_url =
     "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAX_pG0lQyteKQLsTGQrAPSoYIkPJ9jHiQ";
-  user = new Subject<User>();
+  $user = new Subject<User>();
 
   constructor(private http: HttpClient) {}
 
@@ -89,7 +89,7 @@ export class AuthService {
   ) {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(email, userId, token, expirationDate);
-    this.user.next(user);
+    this.$user.next(user);
   }
 
   private handleError(errorRes: HttpErrorResponse) {
