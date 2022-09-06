@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError, Subject, tap, throwError } from "rxjs";
+import { BehaviorSubject, catchError, Subject, tap, throwError } from "rxjs";
 import { User } from "./user.model";
 
 // https://firebase.google.com/docs/reference/rest/auth/#section-create-email-password
@@ -22,7 +22,7 @@ export class AuthService {
     "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAX_pG0lQyteKQLsTGQrAPSoYIkPJ9jHiQ";
   signUp_url =
     "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAX_pG0lQyteKQLsTGQrAPSoYIkPJ9jHiQ";
-  $user = new Subject<User>();
+  $user = new BehaviorSubject<User>(null);
 
   constructor(private http: HttpClient) {}
 
