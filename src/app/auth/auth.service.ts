@@ -3,26 +3,31 @@ import { Injectable } from "@angular/core";
 import { catchError, throwError } from "rxjs";
 
 // https://firebase.google.com/docs/reference/rest/auth/#section-create-email-password
-interface AuthResponseData {
+export interface AuthResponseData {
+  kind?: string;
   idToken: string;
   email: string;
   refreshToken: string;
   expiresIn: string;
   localId: string;
+  registered?: boolean;
 }
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
-  endpoint_url =
+  signIn_url =
+    "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAX_pG0lQyteKQLsTGQrAPSoYIkPJ9jHiQ";
+
+  signUp_url =
     "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAX_pG0lQyteKQLsTGQrAPSoYIkPJ9jHiQ";
 
   constructor(private http: HttpClient) {}
 
   signup(email: string, password: string) {
     return this.http
-      .post<AuthResponseData>(this.endpoint_url, {
+      .post<AuthResponseData>(this.signUp_url, {
         email: email,
         password: password,
         returnSecureToken: true,
@@ -44,5 +49,13 @@ export class AuthService {
           });
         })
       );
+  }
+
+  login(email: string, password: string) {
+    return this.http.post<AuthResponseData>(this.signIn_url, {
+      email: email,
+      password: password,
+      returnSecureToken: true,
+    });
   }
 }
