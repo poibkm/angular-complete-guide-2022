@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError, throwError } from "rxjs";
+import { catchError, Subject, tap, throwError } from "rxjs";
+import { User } from "./user.model";
 
 // https://firebase.google.com/docs/reference/rest/auth/#section-create-email-password
 export interface AuthResponseData {
@@ -19,9 +20,9 @@ export interface AuthResponseData {
 export class AuthService {
   signIn_url =
     "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAX_pG0lQyteKQLsTGQrAPSoYIkPJ9jHiQ";
-
   signUp_url =
     "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAX_pG0lQyteKQLsTGQrAPSoYIkPJ9jHiQ";
+  user = new Subject<User>();
 
   constructor(private http: HttpClient) {}
 
@@ -34,7 +35,28 @@ export class AuthService {
           returnSecureToken: true,
         })
         // the parameter will automatically be passed under the hood
-        .pipe(catchError(this.handleError))
+        .pipe(
+          catchError(this.handleError),
+          tap((resData) => {
+            this.handleAuthentication(
+              resData.email,
+              resData.localId,
+              resData.idToken,
+              +resData.expiresIn
+            );
+            // Timestamp in ms
+            /* const expirationDate = new Date(
+              new Date().getTime() + +resData.expiresIn * 1000
+            );
+            const user = new User(
+              resData.email,
+              resData.localId,
+              resData.idToken,
+              expirationDate
+            );
+            this.user.next(user); */
+          })
+        )
     );
   }
 
@@ -45,8 +67,29 @@ export class AuthService {
         password: password,
         returnSecureToken: true,
       })
-      .pipe(catchError((error) => this.handleError(error)));
+      .pipe(
+        catchError((error) => this.handleError(error)),
+        tap((resData) => {
+          this.handleAuthentication(
+            resData.email,
+            resData.localId,
+            resData.idToken,
+            +resData.expiresIn
+          );
+        })
+      );
     // .pipe(catchError(this.handleError));
+  }
+
+  private handleAuthentication(
+    email: string,
+    userId: string,
+    token: string,
+    expiresIn: number
+  ) {
+    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+    const user = new User(email, userId, token, expirationDate);
+    this.user.next(user);
   }
 
   private handleError(errorRes: HttpErrorResponse) {
