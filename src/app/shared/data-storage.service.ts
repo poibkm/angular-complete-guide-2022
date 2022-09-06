@@ -29,23 +29,14 @@ export class DataStorageService {
   }
 
   fetchRecipes() {
-    // take: Takes 1 value from obersvable and after that unsubscribe
-    return this.authService.$user.pipe(
-      take(1),
-      // exhaustMap: It waits for the first observable ($user) to complete
-      // Then gets replaced by the new observable
-      exhaustMap((user) => {
-        return this.http.get<Recipe[]>(`${this.DB_URL}/recipes.json`, {
-          params: new HttpParams().set("auth", user.token),
-        });
-      }),
+    return this.http.get<Recipe[]>(`${this.DB_URL}/recipes.json`).pipe(
       map((recipes) => {
         // map is called on an array; normal JS map method
         return recipes.map((recipe) => {
           /* return {
-            ...recipe,
-            ingredients: recipe.ingredients ? recipe.ingredients : [],
-          }; */
+              ...recipe,
+              ingredients: recipe.ingredients ? recipe.ingredients : [],
+            }; */
           // Merging objects => will be overwritten if it existsr
           return {
             ingredients: [],
