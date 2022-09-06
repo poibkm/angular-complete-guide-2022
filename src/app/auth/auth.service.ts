@@ -15,7 +15,7 @@ interface AuthResponseData {
 })
 export class AuthService {
   endpoint_url =
-    "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[AIzaSyAX_pG0lQyteKQLsTGQrAPSoYIkPJ9jHiQ]";
+    "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAX_pG0lQyteKQLsTGQrAPSoYIkPJ9jHiQ";
 
   constructor(private http: HttpClient) {}
 
