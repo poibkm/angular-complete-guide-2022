@@ -1,8 +1,9 @@
-import { Component, ComponentFactoryResolver, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { AlertComponent } from "../shared/alert/alert.component";
+import { PlaceholderDirective } from "../shared/placeholder.directive";
 import { AuthResponseData, AuthService } from "./auth.service";
 
 @Component({
@@ -14,12 +15,10 @@ export class AuthComponent implements OnInit {
   isLoginMode = true;
   isLoading = false;
   error: string = null;
+  @ViewChild(PlaceholderDirective, { static: false })
+  alertHost: PlaceholderDirective;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private componentFactoryResolver: ComponentFactoryResolver
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {}
 
@@ -79,9 +78,9 @@ export class AuthComponent implements OnInit {
   private showErrorAlert(message: string) {
     // Valid TS-Code, but invalid Angular-Code
     // const alertCmp = new AlertComponent();
-    const alertCmpFactory =
-      this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
 
+    const hostViewContainerRef = this.alertHost.viewContainerRef;
+    hostViewContainerRef.clear();
     hostViewContainerRef.createComponent<AlertComponent>(AlertComponent);
   }
 }
