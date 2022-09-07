@@ -1,7 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
+import { AlertComponent } from "../shared/alert/alert.component";
+import { PlaceholderDirective } from "../shared/placeholder.directive";
 import { AuthResponseData, AuthService } from "./auth.service";
 
 @Component({
@@ -9,10 +11,14 @@ import { AuthResponseData, AuthService } from "./auth.service";
   templateUrl: "./auth.component.html",
   styleUrls: ["./auth.component.css"],
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   isLoginMode = true;
   isLoading = false;
   error: string = null;
+  @ViewChild(PlaceholderDirective, { static: false })
+  alertHost: PlaceholderDirective;
+
+  private closeSub: Subscription;
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -48,6 +54,7 @@ export class AuthComponent implements OnInit {
       error: (errorMessage) => {
         console.log(errorMessage);
         this.error = errorMessage;
+        this.showErrorAlert(errorMessage);
         this.isLoading = false;
       },
     });
@@ -64,5 +71,31 @@ export class AuthComponent implements OnInit {
     ); */
 
     form.reset();
+  }
+
+  onHandleError() {
+    this.error = null;
+  }
+
+  ngOnDestroy() {
+    if (this.closeSub) {
+      this.closeSub.unsubscribe();
+    }
+  }
+
+  private showErrorAlert(message: string) {
+    // Valid TS-Code, but invalid Angular-Code
+    // const alertCmp = new AlertComponent();
+
+    const hostViewContainerRef = this.alertHost.viewContainerRef;
+    hostViewContainerRef.clear();
+    const componentRef =
+      hostViewContainerRef.createComponent<AlertComponent>(AlertComponent);
+
+    componentRef.instance.message = message;
+    this.closeSub = componentRef.instance.close.subscribe(() => {
+      this.closeSub.unsubscribe();
+      hostViewContainerRef.clear();
+    });
   }
 }
