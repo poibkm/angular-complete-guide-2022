@@ -3,6 +3,8 @@
     <app-shopping-edit></app-shopping-edit>
     <hr />
     <ul class="list-group">
+      <!-- async pipe creates a subscription under the hood (and manages unsubscribing automatically when a component is destroyed -->
+      <!-- So in this case the first ingredients is an Observable holding an object, and the second ingredients is an array, being a property of that object -->
       <a
         class="list-group-item"
         style="cursor: pointer"
