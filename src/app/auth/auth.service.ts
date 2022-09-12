@@ -4,15 +4,6 @@ import * as fromApp from "../store/app.reducer";
 import * as AuthActions from "../auth/store/auth.actions";
 
 // https://firebase.google.com/docs/reference/rest/auth/#section-create-email-password
-export interface AuthResponseData {
-  kind?: string;
-  idToken: string;
-  email: string;
-  refreshToken: string;
-  expiresIn: string;
-  localId: string;
-  registered?: boolean;
-}
 
 @Injectable({
   providedIn: "root",
