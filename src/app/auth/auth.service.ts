@@ -26,7 +26,7 @@ export class AuthService {
     "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAX_pG0lQyteKQLsTGQrAPSoYIkPJ9jHiQ";
   signUp_url =
     "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAX_pG0lQyteKQLsTGQrAPSoYIkPJ9jHiQ";
-  $user = new BehaviorSubject<User>(null);
+  // $user = new BehaviorSubject<User>(null);
   private tokenExpirationTimer: any;
 
   constructor(
