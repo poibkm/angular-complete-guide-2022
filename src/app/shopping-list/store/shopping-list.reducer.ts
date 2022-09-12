@@ -7,10 +7,6 @@ export interface State {
   editedIngredientIndex: number;
 }
 
-export interface AppState {
-  shoppingList: State;
-}
-
 // Recommended to use a JS object
 const initialState: State = {
   // TS automatically assumes that it is of type Ingredient[]
