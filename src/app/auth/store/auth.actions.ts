@@ -7,6 +7,7 @@ export const AUTHENTICATE_FAIL = "[Auth] Authenticate Fail";
 export const SIGNUP_START = "[Auth] Signup Start";
 export const SIGNUP_SUCCESS = "[Auth] Signup";
 export const HANDLE_ERROR = "[Auth] Handle Error";
+export const AUTO_LOGIN = "[Auth] Auto Login";
 
 export class LoginSuccess implements Action {
   readonly type = LOGIN_SUCCESS;
@@ -45,10 +46,15 @@ export class HandleError implements Action {
   readonly type = HANDLE_ERROR;
 }
 
+export class AutoLogin implements Action {
+  readonly type = AUTO_LOGIN;
+}
+
 export type AuthActions =
   | LoginSuccess
   | Logout
   | LoginStart
   | LoginFail
   | SignupStart
-  | HandleError;
+  | HandleError
+  | AutoLogin;
