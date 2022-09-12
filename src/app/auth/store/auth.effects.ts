@@ -23,6 +23,10 @@ const signupUrl =
 
 @Injectable()
 export class AuthEffects {
+  authSignup = createEffect(() =>
+    this.actions$.pipe(ofType(AuthActions.SIGNUP_START))
+  );
+
   authLogin = createEffect(
     () =>
       this.actions$.pipe(
@@ -39,7 +43,7 @@ export class AuthEffects {
                 const expirationDate = new Date(
                   new Date().getTime() + +resData.expiresIn * 1000
                 );
-                return new AuthActions.Login({
+                return new AuthActions.LoginSuccess({
                   email: resData.email,
                   userId: resData.localId,
                   token: resData.idToken,
