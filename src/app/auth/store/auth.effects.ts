@@ -6,6 +6,7 @@ import { environment } from "src/environments/environment";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { User } from "../user.model";
+import { AuthService } from "../auth.service";
 
 export interface AuthResponseData {
   kind?: string;
@@ -72,6 +73,9 @@ export class AuthEffects {
               returnSecureToken: true,
             })
             .pipe(
+              tap((resData) => {
+                this.authService.setLogoutTimer(+resData.expiresIn * 1000);
+              }),
               map((resData) => {
                 return handleAuthentication(
                   +resData.expiresIn,
@@ -101,6 +105,9 @@ export class AuthEffects {
               returnSecureToken: true,
             })
             .pipe(
+              tap((resData) => {
+                this.authService.setLogoutTimer(+resData.expiresIn * 1000);
+              }),
               map((resData) => {
                 return handleAuthentication(
                   +resData.expiresIn,
@@ -121,7 +128,7 @@ export class AuthEffects {
   authRedirect = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(AuthActions.LOGIN_SUCCESS, AuthActions.LOGOUT),
+        ofType(AuthActions.LOGIN_SUCCESS),
         tap(() => {
           this.router.navigate(["/"]);
         })
@@ -154,6 +161,10 @@ export class AuthEffects {
 
           if (loadedUser.token) {
             // this.$user.next(loadedUser);
+            const expirationDuration =
+              new Date(userData._tokenExpirationDate).getTime() -
+              new Date().getTime();
+            this.authService.setLogoutTimer(expirationDuration);
             return new AuthActions.LoginSuccess({
               email: loadedUser.email,
               userId: loadedUser.id,
@@ -175,7 +186,9 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(AuthActions.LOGOUT),
         tap(() => {
+          this.authService.clearLogoutTimer();
           localStorage.removeItem("userData");
+          this.router.navigate(["/auth"]);
         })
       ),
     { dispatch: false }
@@ -184,6 +197,7 @@ export class AuthEffects {
   constructor(
     private actions$: Actions,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 }
