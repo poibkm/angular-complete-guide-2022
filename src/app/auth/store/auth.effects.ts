@@ -1,9 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { catchError, map, of, switchMap } from "rxjs";
+import { catchError, map, of, switchMap, tap } from "rxjs";
 import * as AuthActions from "./auth.actions";
 import { environment } from "src/environments/environment";
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 
 export interface AuthResponseData {
   kind?: string;
@@ -38,24 +39,50 @@ export class AuthEffects {
                 const expirationDate = new Date(
                   new Date().getTime() + +resData.expiresIn * 1000
                 );
-                return of(
-                  new AuthActions.Login({
-                    email: resData.email,
-                    userId: resData.localId,
-                    token: resData.idToken,
-                    expirationDate: expirationDate,
-                  })
-                );
+                return new AuthActions.Login({
+                  email: resData.email,
+                  userId: resData.localId,
+                  token: resData.idToken,
+                  expirationDate: expirationDate,
+                });
               }),
-              catchError((error) => {
-                //
-                return of();
+              catchError((errorRes) => {
+                let errorMessage = "An unknown error occured!";
+                if (!errorRes.error || !errorRes.error.error) {
+                  return of(new AuthActions.LoginFail(errorMessage));
+                }
+                switch (errorRes.error.error.message) {
+                  case "EMAIL_EXISTS":
+                    errorMessage = "This email already exists.";
+                    break;
+                  case "EMAIL_NOT_FOUND":
+                    errorMessage = "Password or email is wrong";
+                    break;
+                  case "INVALID_PASSWORD":
+                    errorMessage = "Password or email is wrong";
+                }
+                return of(new AuthActions.LoginFail(errorMessage));
               })
             );
+        })
+      ),
+    { dispatch: true }
+  );
+
+  authSuccess = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.LOGIN_SUCCESS),
+        tap(() => {
+          this.router.navigate(["/"]);
         })
       ),
     { dispatch: false }
   );
 
-  constructor(private actions$: Actions, private http: HttpClient) {}
+  constructor(
+    private actions$: Actions,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 }
