@@ -29,7 +29,12 @@ export class AuthComponent implements OnInit, OnDestroy {
     private store: Store<fromApp.AppState>
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.store.select("auth").subscribe((authState) => {
+      this.isLoading = authState.loading;
+      this.error = authState.authError;
+    });
+  }
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
@@ -55,7 +60,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     }
 
     // https://rxjs.dev/deprecations/subscribe-arguments
-    authObs.subscribe({
+    /* authObs.subscribe({
       next: (resData) => {
         console.log(resData);
         this.isLoading = false;
@@ -67,7 +72,7 @@ export class AuthComponent implements OnInit, OnDestroy {
         this.showErrorAlert(errorMessage);
         this.isLoading = false;
       },
-    });
+    }); */
     /* authObs.subscribe(
       (resData) => {
         console.log(resData);
