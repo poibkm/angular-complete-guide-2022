@@ -6,6 +6,7 @@ export const LOGOUT = "[Auth] Logout";
 export const AUTHENTICATE_FAIL = "[Auth] Authenticate Fail";
 export const SIGNUP_START = "[Auth] Signup Start";
 export const SIGNUP_SUCCESS = "[Auth] Signup";
+export const HANDLE_ERROR = "[Auth] Handle Error";
 
 export class LoginSuccess implements Action {
   readonly type = LOGIN_SUCCESS;
@@ -40,9 +41,14 @@ export class SignupStart implements Action {
   constructor(public payload: { email: string; password: string }) {}
 }
 
+export class HandleError implements Action {
+  readonly type = HANDLE_ERROR;
+}
+
 export type AuthActions =
   | LoginSuccess
   | Logout
   | LoginStart
   | LoginFail
-  | SignupStart;
+  | SignupStart
+  | HandleError;

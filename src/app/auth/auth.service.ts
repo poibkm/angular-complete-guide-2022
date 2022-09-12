@@ -35,61 +35,6 @@ export class AuthService {
     private store: Store<fromApp.AppState>
   ) {}
 
-  signup(email: string, password: string) {
-    return (
-      this.http
-        .post<AuthResponseData>(this.signUp_url, {
-          email: email,
-          password: password,
-          returnSecureToken: true,
-        })
-        // the parameter will automatically be passed under the hood
-        .pipe(
-          catchError(this.handleError),
-          tap((resData) => {
-            this.handleAuthentication(
-              resData.email,
-              resData.localId,
-              resData.idToken,
-              +resData.expiresIn
-            );
-            // Timestamp in ms
-            /* const expirationDate = new Date(
-              new Date().getTime() + +resData.expiresIn * 1000
-            );
-            const user = new User(
-              resData.email,
-              resData.localId,
-              resData.idToken,
-              expirationDate
-            );
-            this.user.next(user); */
-          })
-        )
-    );
-  }
-
-  login(email: string, password: string) {
-    return this.http
-      .post<AuthResponseData>(this.signIn_url, {
-        email: email,
-        password: password,
-        returnSecureToken: true,
-      })
-      .pipe(
-        catchError((error) => this.handleError(error)),
-        tap((resData) => {
-          this.handleAuthentication(
-            resData.email,
-            resData.localId,
-            resData.idToken,
-            +resData.expiresIn
-          );
-        })
-      );
-    // .pipe(catchError(this.handleError));
-  }
-
   autoLogin() {
     // JSON.parse converts it back to a JS Object literal
     const userData: {
@@ -130,7 +75,6 @@ export class AuthService {
   logout() {
     // this.$user.next(null);
     this.store.dispatch(new AuthActions.Logout());
-    this.router.navigate(["/auth"]);
     localStorage.removeItem("userData");
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
