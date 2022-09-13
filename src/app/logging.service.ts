@@ -1,12 +1,8 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
-@Injectable({
-  providedIn: "root",
-})
+// @Injectable({ providedIn: 'root' })
 export class LoggingService {
   lastlog: string;
-
-  constructor() {}
 
   printLog(message: string) {
     console.log(message);
